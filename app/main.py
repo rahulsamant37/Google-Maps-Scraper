@@ -195,34 +195,39 @@ RESULT_TEMPLATE = """
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        searchquery = request.form.get("searchquery", "").strip().lower()
-        outputformat = request.form.get("outputformat", "").strip().lower()
-        headless = 1 if request.form.get("headless") == "on" else 0
+        try:
+            searchquery = request.form.get("searchquery", "").strip().lower()
+            outputformat = request.form.get("outputformat", "").strip().lower()
+            headless = 1 if request.form.get("headless") == "on" else 0
 
-        if not searchquery or not outputformat:
-            error = "Missing search query or output format."
+            if not searchquery or not outputformat:
+                error = "Missing search query or output format."
+                return render_template_string(INDEX_TEMPLATE, error=error)
+            
+            flask_front = FlaskFrontend()
+            flask_front.outputFormatValue = outputformat
+            Communicator.set_frontend_object(flask_front)
+
+            backend = Backend(searchquery, outputformat, headless)
+            backend.mainscraping()
+
+            pattern = os.path.join(OUTPUT_FOLDER, f"{searchquery} - pingme output*")
+            files = glob.glob(pattern)
+            if files:
+                latest_file = max(files, key=os.path.getmtime)
+                filename = os.path.basename(latest_file)
+                file_url = f"/download/{filename}"
+            else:
+                file_url = None
+            
+            return render_template_string(RESULT_TEMPLATE, 
+                                       messages=flask_front.messages, 
+                                       file_url=file_url)
+                                       
+        except Exception as e:
+            error = f"An error occurred during scraping: {str(e)}"
             return render_template_string(INDEX_TEMPLATE, error=error)
-        
-        # Set up a simple frontend object for message capturing
-        flask_front = FlaskFrontend()
-        flask_front.outputFormatValue = outputformat  # Set the output format
-        Communicator.set_frontend_object(flask_front)
-
-        # Run the backend scraper synchronously
-        backend = Backend(searchquery, outputformat, headless)
-        backend.mainscraping()
-
-        # Locate the file saved by the scraper
-        pattern = os.path.join(OUTPUT_FOLDER, f"{searchquery} - pingme output*")
-        files = glob.glob(pattern)
-        if files:
-            latest_file = max(files, key=os.path.getmtime)
-            filename = os.path.basename(latest_file)
-            file_url = f"/download/{filename}"
-        else:
-            file_url = None
-        
-        return render_template_string(RESULT_TEMPLATE, messages=flask_front.messages, file_url=file_url)
+            
     return render_template_string(INDEX_TEMPLATE, error=None)
 
 @app.route("/download/<path:filename>")

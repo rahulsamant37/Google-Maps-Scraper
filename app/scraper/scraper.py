@@ -44,13 +44,26 @@ class Backend(Base):
     def init_driver(self):
         options = webdriver.ChromeOptions()
         if self.headlessMode == 1:
-                options.headless = True
-
+            options.headless = True
+    
+        # Add these options to fix deployment issues
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--disable-software-rasterizer')
+        options.add_argument('--remote-debugging-port=9222')
+        
+        # Add a unique temporary user data directory
+        import tempfile
+        user_data_dir = tempfile.mkdtemp()
+        options.add_argument(f'--user-data-dir={user_data_dir}')
+        
+        # Existing preferences
         prefs = {"profile.managed_default_content_settings.images": 2}
         options.add_experimental_option("prefs", prefs)
-
+    
         Communicator.show_message("Wait checking for driver...\nIf you don't have webdriver in your machine it will install it")
-
+    
         try:
             if DRIVER_EXECUTABLE_PATH is not None:
                 service = Service(executable_path=DRIVER_EXECUTABLE_PATH)
@@ -61,7 +74,7 @@ class Backend(Base):
         except Exception as e:
             Communicator.show_message(f"Error initializing driver: {e}")
             raise
-
+        
         Communicator.show_message("Opening browser...")
         self.driver.maximize_window()
         self.driver.implicitly_wait(self.timeout)
