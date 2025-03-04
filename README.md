@@ -26,7 +26,7 @@
 ## Note: 
 **Our all scrapers are working, if you find any issue or bug please open an issue with the detail of issue. We will try to resolve it quickly for you.**
 
-<img src="Readme_assets/app.jpg" alt="Pingme open sourced google maps scraper">
+<img src="Readme_assets/app.png" alt="Pingme open sourced google maps scraper">
 
 ## Sample Data
     {
