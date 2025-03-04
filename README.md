@@ -52,6 +52,7 @@ To get started with the Google Maps Scraper, follow these steps:
 
    ```shell
    git clone https://github.com/rahulsamant37/Google-Maps-Scraper.git
+   cd Google-Maps-Scraper
    ```
 
 ### 2. Setup the Environment for Scraper
