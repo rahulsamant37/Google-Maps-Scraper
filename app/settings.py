@@ -1,0 +1,3 @@
+OUTPUT_PATH = "output/"
+
+DRIVER_EXECUTABLE_PATH = None
