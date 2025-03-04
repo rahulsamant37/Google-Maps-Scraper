@@ -27,7 +27,7 @@ class DataSaver:
             totalRecords = dataFrame.shape[0]
 
             searchQuery = Communicator.get_search_query()
-            filename = f"{searchQuery} - GMS output"
+            filename = f"{searchQuery} - pingme output"
 
             if self.outputFormat == "excel":
                 extension = ".xlsx"
@@ -44,7 +44,7 @@ class DataSaver:
             if os.path.exists(joinedPath):
                 index = 1
                 while True:
-                    filename = f"{searchQuery} - GMS output ({index})"
+                    filename = f"{searchQuery} - pingme output ({index})"
 
                     joinedPath = OUTPUT_PATH + filename + extension
 
