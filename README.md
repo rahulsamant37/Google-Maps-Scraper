@@ -67,12 +67,6 @@ To get started with the Google Maps Scraper, follow these steps:
 
    It will auto install the dependencies
 
-## 3. Install the Driver
-
-   - If you already have a driver compatible with your Chrome browser, specify the driver path in `app/settings.py`.
-   - If you don't have a driver, the scraper will automatically install it.
-   - If the automatic installation fails, download the driver from the [Chrome Official Page](https://googlechromelabs.github.io/chrome-for-testing/#stable) and specify the driver path in `app/settings.py`. And then re-run the scraper.
-
 ### 3. Run the scraper:
    ```shell
    python app/run.py
