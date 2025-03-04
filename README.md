@@ -59,7 +59,7 @@ To get started with the Google Maps Scraper, follow these steps:
 
 - For Windows, run:
   ```bash
-  ./setup_win.cmd
+  ./setup_win.cmd # pip install -r requirements.txt
    ```
 - For Linux, run:
    ```
